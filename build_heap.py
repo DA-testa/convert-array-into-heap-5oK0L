@@ -1,49 +1,50 @@
 # python3
+# Linda Slapiņa 221RDB214
 
-def parallel_processing(n, m, data):
-    output = []
-    g = []
-    for i in range(n):
-        g.append(0)
-    d = 0
-    t = 0
-    while d < m:
-        for i in range(n):
-            if g[i] == t:
-                output.append((i, t))
-                g[i] = g[i] + data[d]
-                d = d + 1
-        t = t + 1
-    # TODO: write the function for simulating parallel tasks, 
-    # create the output pairs
+def work1(data, a, i, swaps):
+    gar = 2 * i + 1
+    gar2 = 2 * i + 2
 
-    return output
+    rez = i
+    if gar < a and data[gar] < data[rez]:
+        rez = gar
+        
+    if gar2 < a and data[gar2] < data[rez]:
+        rez = gar2
+        
+    if rez != i:
+        swaps.append((i,rez))
+        data[i], data[rez] = data[rez], data[i]
+        work1(data, a, rez, swaps)    
+
+
+def work2 (data):
+    swaps = []
+    a = len(data)
+    for i in range(a// 2 -1, -1, -1):
+        work1(data, a, i, swaps)
+    return swaps
 
 def main():
-    # TODO: create input from keyboard
-    # input consists of two lines
-    # first line - n and m
-    # n - thread count 
-    # m - job count
-    n = 0
-    m = 0
-    r = input().split()
-    n = int(r[0])
-    m = int(r[1])
-
-    # second line - data 
-    # data - contains m integers t(i) - the times in seconds it takes any thread to process i-th job
-    data = []
-    r = input().split()
-    for i in range(m):
-        data.append(int(r[i]))
-
-    # TODO: create the function
-    result = parallel_processing(n,m,data)
+    text = input()
     
-    # TODO: print out the results, each pair in it's own line
-    for i in range(m):
-        print(result[i][0], result[i][1])
+    if 'I' in text:
+        n = int(input())
+        data = list(map(int, input().split()))
+
+    if 'F' in text:
+        filee = input()
+        with open("tests/" + filee, 'r') as faili:
+            n = int(faili.readline())
+            data = list(map(int, faili.readline().split()))
+            
+    assert len(data) == n
+
+    swaps = work2(data)
+
+    print(len(swaps))
+    for i, j in swaps:
+        print(i, j) 
 
 
 
