@@ -1,51 +1,41 @@
 def build_heap(data):
-    swaps = []
-    n = len(data)
-    
-    for i in range(n // 2 - 1, -1, -1):
-        j = i
-        while True:
-            k =2*j + 1
-            if k >= n:
-                break
-            if k +1 < n and data[k + 1] < data[k]:
-                k += 1
-            if data[j] > data[k]:
-                swaps.append((j, k))
-                data[j], data[k] = data[k], data[j]
-                j = k
-            else:
-                break  
-  
-    return swaps
+    mainam = []
+    lielums = len(data)
+    for i in range(lielums // 2, -1, -1):
+        maz(data, i, mainam)
+    return mainam
 
-
+def maz(data, i, mainam):
+    lielums = len(data)
+    min_inde = i
+    kreisais = 2 * i + 1
+    labais = 2 * i + 2
+    if kreisais < lielums and data[kreisais] < data[min_inde]:
+        min_inde = kreisais
+    if labais < lielums and data[labais] < data[min_inde]:
+        min_inde = labais
+    if min_inde != i:
+        mainam.append((i, min_inde))
+        data[i], data[min_inde] = data[min_inde], data[i]
+        maz(data, min_inde, mainam)
+        
 def main():
-    
-    read_input = input()
-    
-    if read_input.startswith('I'):
+    ievade = input()
+    if "I" in ievade:
         n = int(input())
         data = list(map(int, input().split()))
         assert len(data) == n
-        swaps = build_heap(data)
-        print(len(swaps))
-        for i, j in swaps:
-            print(i, j)
-            
-    elif read_input.startswith('F'):
-        file = input().strip()
-        with open(f'tests/{file}', 'r') as f:
-            n = int(f.readline().strip())
-            data = list(map(int, f.readline().split()))
-        assert len(data) == n
-        swaps = build_heap(data)
-        print(len(swaps))
+    elif "F" in ievade:
+        fails = input()
+        atrasanas = './tests/'
+        faila_vieta = os.path.join(atrasanas, fails)
+        with open(faila_vieta, mode="r") as file:
+            n = int(file.readline())
+            data = list(map(int, file.readline().split()))
+    mainam = build_heap(data)
+    print(len(mainam))
+    for i, j in mainam:
+        print(i, j)
         
-    else:
-        print('Invalid character')
-     
-
-
 if _name_ == "_main_":
     main()
