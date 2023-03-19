@@ -1,37 +1,51 @@
-def parent(i):
-    return (i - 1) // 2
-
-def left_child(i):
-    return 2 * i + 1
-
-def right_child(i):
-    return 2 * i + 2
-
-def sift_down(arr, i, swaps):
-    n = len(arr)
-    min_index = i
-    l = left_child(i)
-    if l < n and arr[l] < arr[min_index]:
-        min_index = l
-    r = right_child(i)
-    if r < n and arr[r] < arr[min_index]:
-        min_index = r
-    if i != min_index:
-        arr[i], arr[min_index] = arr[min_index], arr[i]
-        swaps.append((i, min_index))
-        sift_down(arr, min_index, swaps)
-
-def build_heap(arr):
-    n = len(arr)
+def build_heap(data):
     swaps = []
-    for i in range(n // 2, -1, -1):
-        sift_down(arr, i, swaps)
+    n = len(data)
+    
+    for i in range(n // 2 - 1, -1, -1):
+        j = i
+        while True:
+            k =2*j + 1
+            if k >= n:
+                break
+            if k +1 < n and data[k + 1] < data[k]:
+                k += 1
+            if data[j] > data[k]:
+                swaps.append((j, k))
+                data[j], data[k] = data[k], data[j]
+                j = k
+            else:
+                break  
+  
     return swaps
 
-if __name__ == '__main__':
-    n = int(input())
-    arr = list(map(int, input().split()))
-    swaps = build_heap(arr)
-    print(len(swaps))
-    for swap in swaps:
-        print(swap[0], swap[1])
+
+def main():
+    
+    read_input = input()
+    
+    if read_input.startswith('I'):
+        n = int(input())
+        data = list(map(int, input().split()))
+        assert len(data) == n
+        swaps = build_heap(data)
+        print(len(swaps))
+        for i, j in swaps:
+            print(i, j)
+            
+    elif read_input.startswith('F'):
+        file = input().strip()
+        with open(f'tests/{file}', 'r') as f:
+            n = int(f.readline().strip())
+            data = list(map(int, f.readline().split()))
+        assert len(data) == n
+        swaps = build_heap(data)
+        print(len(swaps))
+        
+    else:
+        print('Invalid character')
+     
+
+
+if _name_ == "_main_":
+    main()
