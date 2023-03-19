@@ -1,4 +1,4 @@
-import ps
+import os
 def build_heap(data):
     mainam = []
     lielums = len(data)
