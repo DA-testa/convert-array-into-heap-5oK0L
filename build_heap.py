@@ -1,50 +1,37 @@
-import os
-def work1(data, a, i, swaps):
-    gar = 2 * i + 1
-    gar2 = 2 * i + 2
+def parent(i):
+    return (i - 1) // 2
 
-    rez = i
-    if gar < a and data[gar] < data[rez]:
-        rez = gar
-        
-    if gar2 < a and data[gar2] < data[rez]:
-        rez = gar2
-        
-    if rez != i:
-        swaps.append((i,rez))
-        data[i], data[rez] = data[rez], data[i]
-        work1(data, a, rez, swaps)    
+def left_child(i):
+    return 2 * i + 1
 
+def right_child(i):
+    return 2 * i + 2
 
-def work2 (data):
+def sift_down(arr, i, swaps):
+    n = len(arr)
+    min_index = i
+    l = left_child(i)
+    if l < n and arr[l] < arr[min_index]:
+        min_index = l
+    r = right_child(i)
+    if r < n and arr[r] < arr[min_index]:
+        min_index = r
+    if i != min_index:
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+        swaps.append((i, min_index))
+        sift_down(arr, min_index, swaps)
+
+def build_heap(arr):
+    n = len(arr)
     swaps = []
-    a = len(data)
-    for i in range(a// 2 -1, -1, -1):
-        work1(data, a, i, swaps)
+    for i in range(n // 2, -1, -1):
+        sift_down(arr, i, swaps)
     return swaps
 
-def main():
-    text = input()
-    
-    if 'I' in text:
-        n = int(input())
-        data = list(map(int, input().split()))
-
-    if 'F' in text:
-        filee = input()
-        with open("tests/" + filee, 'r') as faili:
-            n = int(faili.readline())
-            data = list(map(int, faili.readline().split()))
-            
-    assert len(data) == n
-
-    swaps = work2(data)
-
+if __name__ == '__main__':
+    n = int(input())
+    arr = list(map(int, input().split()))
+    swaps = build_heap(arr)
     print(len(swaps))
-    for i, j in swaps:
-        print(i, j) 
-
-
-
-if _name_ == "_main_":
-    main()
+    for swap in swaps:
+        print(swap[0], swap[1])
