@@ -1,5 +1,4 @@
 # python3
-
 def work1(data, a, i, swaps):
     gar = 2 * i + 1
     gar2 = 2 * i + 2
