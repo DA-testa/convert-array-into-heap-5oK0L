@@ -1,5 +1,4 @@
 # python3
-# Linda Slapiņa 221RDB214
 
 def work1(data, a, i, swaps):
     gar = 2 * i + 1
