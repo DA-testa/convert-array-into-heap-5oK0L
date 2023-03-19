@@ -1,42 +1,50 @@
 import os
-def build_heap(data):
-    mainam = []
-    lielums = len(data)
-    for i in range(lielums // 2, -1, -1):
-        maz(data, i, mainam)
-    return mainam
+def work1(data, a, i, swaps):
+    gar = 2 * i + 1
+    gar2 = 2 * i + 2
 
-def maz(data, i, mainam):
-    lielums = len(data)
-    min_inde = i
-    kreisais = 2 * i + 1
-    labais = 2 * i + 2
-    if kreisais < lielums and data[kreisais] < data[min_inde]:
-        min_inde = kreisais
-    if labais < lielums and data[labais] < data[min_inde]:
-        min_inde = labais
-    if min_inde != i:
-        mainam.append((i, min_inde))
-        data[i], data[min_inde] = data[min_inde], data[i]
-        maz(data, min_inde, mainam)
+    rez = i
+    if gar < a and data[gar] < data[rez]:
+        rez = gar
         
+    if gar2 < a and data[gar2] < data[rez]:
+        rez = gar2
+        
+    if rez != i:
+        swaps.append((i,rez))
+        data[i], data[rez] = data[rez], data[i]
+        work1(data, a, rez, swaps)    
+
+
+def work2 (data):
+    swaps = []
+    a = len(data)
+    for i in range(a// 2 -1, -1, -1):
+        work1(data, a, i, swaps)
+    return swaps
+
 def main():
-    ievade = input()
-    if "I" in ievade:
+    text = input()
+    
+    if 'I' in text:
         n = int(input())
         data = list(map(int, input().split()))
-        assert len(data) == n
-    elif "F" in ievade:
-        fails = input()
-        atrasanas = './tests/'
-        faila_vieta = os.path.join(atrasanas, fails)
-        with open(faila_vieta, mode="r") as file:
-            n = int(file.readline())
-            data = list(map(int, file.readline().split()))
-    mainam = build_heap(data)
-    print(len(mainam))
-    for i, j in mainam:
-        print(i, j)
-        
+
+    if 'F' in text:
+        filee = input()
+        with open("tests/" + filee, 'r') as faili:
+            n = int(faili.readline())
+            data = list(map(int, faili.readline().split()))
+            
+    assert len(data) == n
+
+    swaps = work2(data)
+
+    print(len(swaps))
+    for i, j in swaps:
+        print(i, j) 
+
+
+
 if _name_ == "_main_":
     main()
